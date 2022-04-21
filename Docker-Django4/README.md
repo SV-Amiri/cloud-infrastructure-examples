@@ -11,6 +11,8 @@ deployment pipeline for new application code considerably.
 
 - Deploy an example Django application in a Docker container using gunicorn to launch.
 
+- Example application is front ended by an NGINX reverse proxy. So the flow is as follows:  Web Client <==> NGINX Port 8080 <==> gnuicorn socket <==> Django.
+
 ## Contents
 
 - requirements-stage{1-3}.txt: Python "pip" packages.
