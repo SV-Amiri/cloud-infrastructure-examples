@@ -1,0 +1,26 @@
+<!-- xkcd_app/xkcd_app/templates/xkcd_app/homepage.html -->
+<html>
+<head>
+<title>XKCD App</title>
+<link rel=stylesheet href=https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css integrity=sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z crossorigin=anonymous>
+</head>
+<body>
+  <div class=container>
+    <div class=row style=margin-top:15px>
+        <div class=col-xs-8 col-sm-10 mx-auto col-md-12>
+            <div class=col text-center>
+                <h2 class=header >#{{number}} | {{title}}</h2>
+            <hr/>
+            <img src={{image_link}} class=img-fluid alt={{alt_text}} />
+            <hr/>
+                <a class=btn btn-default href={% url 'homepage' %}>Another One</a>
+               <hr/>
+               <a rel=license href=http://creativecommons.org/licenses/by-nc/2.5/><img alt=Creative Commons License style=border:none src=http://creativecommons.org/images/public/somerights20.png></a>
+               All credits for comics belongs to <a href=https://xkcd.com/license.html>XKCD.</a></p>
+            </div>
+        </div>
+    </div>
+<script src=https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js integrity=sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV crossorigin=anonymous></script>
+</body>
+</html>
+
