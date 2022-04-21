@@ -1,4 +1,0 @@
-oauthlib
-requests
-requests-oauthlib
-six

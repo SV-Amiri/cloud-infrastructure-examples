@@ -28,4 +28,5 @@ textblob
 toml>=0.10.0
 urllib3>=1.26
 webpreview>=1.6
+wheel
 
