@@ -1,3 +1,4 @@
+# Example
 # Django commands
 django_app_name="xkcd_app"
 django-admin startproject ${django_app_name}
