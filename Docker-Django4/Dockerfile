@@ -1,18 +1,18 @@
 ##
 ## Amazon Linux w/ Python 3.9 and Django 4.
 ##
-## Note: Build done in stages so to minimise application deploy time.
+## Note: Build in stages to minimise deploy time.
 ##
 
-# Use Amazon Linux version as is compatible with AWS Fargate
+# Use Amazon Linux for compatibility with AWS Fargate
 FROM amazonlinux:2022 AS stage1
 LABEL Maintainer="Edward Irvine <edward.at.mindhive@gmail.com>"
-LABEL Description="Amazon Linux w/ Python3.9 & Django 4" 
+LABEL Description="Amazon Linux w/ Python3.9 & Django 4 & gunicorn & NGINX"
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
 ##
-## FIRST: Install the basics
+## FIRST: Install basics
 ##
 RUN dnf -y update && \
     dnf -y install \
@@ -72,14 +72,17 @@ RUN  dnf -y group install "Development Tools" && \
   pip cache purge
 
 ##
-## FOURTH: Cleanup install
+## FOURTH: Add the pre-trained pipeline package for python spacy module
 ##
-#FROM stage3 AS stage4
+FROM stage3 AS stage4
+WORKDIR /django
+RUN source .venv/bin/activate && \
+  python3 -m spacy download en_core_web_md
 
 ##
-## FIFTH: Run the xkcd_app - a basic Django app for testing
+## FIFTH: Run the xkcd_app - a basic Django app for testing & demonstation.
 ##
-FROM stage3 AS stage5
+FROM stage4 AS stage5
 WORKDIR /django
 COPY . /django/
 LABEL ports="8080"
@@ -91,7 +94,7 @@ RUN  ln -sf /dev/stdout /var/log/nginx/access.log && \
      ln -sf /dev/stderr /var/log/nginx/error.log
 CMD /django/launch-command.bash
 
-## CMD bash launchsource /django/.venv/bin/activate && \
-##   pip install xkcd && \
-##   python3 manage.py migrate && \
-##   exec gunicorn -w5 xkcd_app.wsgi:application --bind 0.0.0.0:8000
+##   NB: for development you can luanch gunicorn like so:
+##      source /django/.venv/bin/activate && \
+##      cd /django/xkcd_app && \
+##      exec gunicorn -w5 xkcd_app.wsgi:application --bind 0.0.0.0:8080

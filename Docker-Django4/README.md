@@ -9,7 +9,7 @@
 
 - Demonstrate build and install of Backend Django Python dependencies.
 
-- Deploy an example Django application in a Docker container using
+- Deploy example Django application in a Docker container using
   gunicorn to launch.
 
 - Example application is front ended by an NGINX reverse proxy. So the
@@ -20,11 +20,11 @@ socket <==> Django.
 
 - requirements-stage{1-3}.txt: Python "pip" packages. Many modules are
   relevant to a particular project I'm working on and may probably be
-  omitted.
+  omitted for your project.
 
 - xkcd_app/ Directory containing a sample Django application.
 
-- python-unsplash-1.1.0.tar A hacked version of the python-unsplash
+- python-unsplash-1.1.0.tar Hacked version of the python-unsplash
   module. This module appears  no longer maintained. After manually relaxing
   the dependencies it seems to compile and install OK.
 
@@ -34,6 +34,6 @@ socket <==> Django.
 
 ## Other Notes
 
-- The majority of Python modules are installed in a Python "venv"
-  virtual environment. To activate the virtual environment say "source
- /django/.venv/bin/activate"
+- The vast majority of Python modules are installed in a Python "venv" virtual
+  environment. To activate this virtual environment say "source
+  /django/.venv/bin/activate"
