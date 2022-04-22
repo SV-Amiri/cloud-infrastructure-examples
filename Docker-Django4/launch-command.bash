@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # launch-command.bash - run by the "CMD" directive in Dockerfile.
-# This launches Django and NGINX after the container launches.
+# This launches Django (via gunicorn) and NGINX after the container launches.
 
 # turn on bash's job control
 set -m
@@ -32,9 +32,10 @@ exec gunicorn xkcd_app.wsgi:application \
     --log-file=- &
 
 # Wait for gunicorn/django to start before launching NGINX
-sleep 5
+sleep 2
 
-# Start the helper process
+# Start nginx
+echo "Starting nginx"
 nginx -c /django/nginx.conf -g 'daemon off;'
 
 # the my_helper_process might need to know how to wait on the

@@ -30,24 +30,39 @@ RUN dnf -y update && \
     dnf clean all
 # Clean up at the end of each stage to reduce image size
 
-
 ##
-## SECOND: Install the "easy", lightweight pip packages
+## SECOND: Install the larger and more complex pip packages.
+## These take a bit of time.
 ##
-
 FROM stage1 AS stage2
 WORKDIR /django
-COPY ./requirements-stage2.txt .
-# Hackage: python-unsplash module unmaintained and won't install.  I've
-# modified the source in local version below to relax dependencies. Seems to
-# work.
-ADD ./python-unsplash-1.1.0.tar . 
+COPY requirements-stage2.txt .
 RUN  dnf -y group install "Development Tools" && \
   dnf -y install python-devel && \
   python3 -m venv .venv && \
   source .venv/bin/activate && \
   python3 -m pip install --upgrade pip && \
   pip install -r requirements-stage2.txt && \
+  pip cache purge && \
+  dnf -y group remove "Development Tools" && \
+  dnf -y remove python3-devel && \
+  dnf -y autoremove && \
+  dnf -y clean all
+
+##
+## THIRD: Install the "easy", lightweight pip packages
+##
+FROM stage2 AS stage3
+WORKDIR /django
+COPY ./requirements-stage3.txt .
+# Hackage: python-unsplash module unmaintained and won't install.  I've
+# modified the source in local version below to relax dependencies. Seems to
+# work.
+ADD ./python-unsplash-1.1.0.tar . 
+RUN  dnf -y group install "Development Tools" && \
+  dnf -y install python-devel && \
+  source .venv/bin/activate && \
+  pip install -r requirements-stage3.txt && \
   cd ./python-unsplash-1.1.0 && \
   python3 setup.py install clean && \
   dnf -y group remove "Development Tools" && \
@@ -55,24 +70,6 @@ RUN  dnf -y group install "Development Tools" && \
   dnf -y autoremove && \
   dnf -y clean all && \
   pip cache purge
-
-
-##
-## THIRD: Install the larger and more complex pip packages.
-## These take a bit of time.
-##
-FROM stage2 AS stage3
-WORKDIR /django
-COPY requirements-stage3.txt .
-RUN  dnf -y group install "Development Tools" && \
-  dnf -y install python-devel && \
-  source .venv/bin/activate && \
-  pip install -r requirements-stage3.txt && \
-  pip cache purge && \
-  dnf -y group remove "Development Tools" && \
-  dnf -y remove python3-devel && \
-  dnf -y autoremove && \
-  dnf -y clean all
 
 ##
 ## FOURTH: Cleanup install
@@ -89,14 +86,9 @@ LABEL ports="8080"
 LABEL organisation="mindhive.org"
 EXPOSE 8080:8080
 WORKDIR /django/xkcd_app
-# Installs the "xkcd" module needed by the example Django app, set up
-# database, then use the "gunicorn" tool to serve Django content.
-#
-# gunicorn recommend the number of workers to be w=(2n +1), where "n" is
-# the number of CPU cores. Below I'm assuming we have 2 cores, so thus we 
-# launch w=5 workers
-
 STOPSIGNAL SIGQUIT
+RUN  ln -sf /dev/stdout /var/log/nginx/access.log && \
+     ln -sf /dev/stderr /var/log/nginx/error.log
 CMD /django/launch-command.bash
 
 ## CMD bash launchsource /django/.venv/bin/activate && \
