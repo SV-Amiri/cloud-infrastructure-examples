@@ -8,6 +8,7 @@ set -m
 
 Django=/django
 Appdir=${Django}/xkcd_app
+# Adjust this. gunicorn recommends setting workers=(2n + 1), where "n" is cores.
 Workers=5
 Sockfile=${Django}/run/gunicorn.sock
 
@@ -22,7 +23,8 @@ source /${Django}/.venv/bin/activate
 pip install xkcd
 # Attempt to serve static files directly from nginx
 mkdir -p ${Django}/{static,media} 2>/dev/null
-python3 manage.py collectstatic
+python3 manage.py collectstatic --noinput # Needed if container rebooted
+python3 manage.py makemigrations
 python3 manage.py migrate
 exec gunicorn xkcd_app.wsgi:application \
     --name=xkcd_app \
