@@ -8,7 +8,7 @@
 FROM amazonlinux:2022 AS stage1
 LABEL Maintainer="Edward Irvine <edward.at.mindhive@gmail.com>"
 LABEL Description="Amazon Linux w/ Python3.9 & Django 4 & gunicorn & NGINX"
-ENV PYTHONDONTWRITEBYTECODE=1
+#ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
 ##
@@ -16,6 +16,7 @@ ENV PYTHONUNBUFFERED=1
 ##
 RUN dnf -y update && \
     dnf -y install \
+    findutils \
     git \
     lsof \
     nginx \
@@ -92,7 +93,7 @@ WORKDIR /django/xkcd_app
 STOPSIGNAL SIGQUIT
 RUN  ln -sf /dev/stdout /var/log/nginx/access.log && \
      ln -sf /dev/stderr /var/log/nginx/error.log
-CMD /django/launch-command.bash
+CMD /django/entrypoint.sh
 
 ##   NB: for development you can luanch gunicorn like so:
 ##      source /django/.venv/bin/activate && \

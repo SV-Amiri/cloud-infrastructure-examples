@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# launch-command.bash - run by the "CMD" directive in Dockerfile.
+# entrypoint.sh - run by the "CMD" directive in Dockerfile.
 # This launches Django (via gunicorn) and NGINX after the container launches.
 
 # turn on bash's job control
