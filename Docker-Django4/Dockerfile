@@ -11,7 +11,7 @@ FROM amazonlinux:2022 AS stage1
 LABEL Maintainer="Edward Irvine <edward.at.mindhive@gmail.com>"
 LABEL Description="Amazon Linux w/ Python3.9 & Django 4 & gunicorn & NGINX"
 #ENV PYTHONDONTWRITEBYTECODE=1
-ENV PYTHONUNBUFFERED=1
+#ENV PYTHONUNBUFFERED=1
 
 ##
 ## FIRST: Install basics
