@@ -12,7 +12,7 @@ Appdir=${Django}/xkcd_app
 Workers=5
 Sockfile=${Django}/run/gunicorn.sock
 
-# Create the run directory if it doesn't exist
+# Create run directory for socket if it doesn't exist
 Rundir=$(dirname $Sockfile)
 test -d $Rundir || mkdir -p $Rundir
 
@@ -21,11 +21,21 @@ test -d $Rundir || mkdir -p $Rundir
 cd $Appdir
 source /${Django}/.venv/bin/activate
 pip install xkcd
+
+## <handle static files>
+## Warning: Likely you will wish to turn off collectstatic if using
+## an external data store like S3.
 # Attempt to serve static files directly from nginx
-mkdir -p ${Django}/{static,media} 2>/dev/null
+for D in ${Django}/{static,media}
+do
+  test -d D || mkdir -p $d
+done
 python3 manage.py collectstatic --noinput # Needed if container rebooted
+## </handle static files>
 python3 manage.py makemigrations
 python3 manage.py migrate
+# Unclear if compiling to pyc helps...
+python -m compileall .
 exec gunicorn xkcd_app.wsgi:application \
     --name=xkcd_app \
     --workers=${Workers} \

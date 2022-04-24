@@ -1,7 +1,9 @@
 ##
-## Amazon Linux w/ Python 3.9 and Django 4.
+## Amazon Linux w/ Python 3.9, Django 4, gunicorn, and NGINX.
 ##
-## Note: Build in stages to minimise deploy time.
+## Client <==> NGINX <==> gunicorn <==> Django
+##
+## Staged build to minimise deploy pipeline time.
 ##
 
 # Use Amazon Linux for compatibility with AWS Fargate
