@@ -60,7 +60,7 @@ sleep 2
 
 #<development without nginx>
 # if you wanted to dispense with nginxand instead have gunicorn
-# serve directly on (say) port 8000, modify the above block like so:
+# serve directly on (say) port 8080, modify the above block like so:
 #
 #  # python3 manage.py collectstatic <-- don't run "collectstatic"
 #  pip install xkcd
@@ -74,6 +74,9 @@ sleep 2
 #      --bind=0.0.0.0:8000 \
 #      --log-level=warn \
 #      --log-file=- &
+#
+#  Then comment out the part below that launches nginx.
+#
 #</development without nginx>
 
 

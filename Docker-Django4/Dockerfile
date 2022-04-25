@@ -16,9 +16,9 @@
 # d) ./xkcd_app/ - Example Django application.
 # e) ./nginx.conf - nginx configuration file.
 #
-# Please note that requirements-stage{1-3}.txt almost certainly needs to be
-# modified for your own use. Majority of modules are there for my particular
-# project and likely can be removed for your project.
+# Please note that requirements-stage{1-3}.txt almost needs to be modified for
+# your own use. Majority of modules are there for my particular project and
+# likely can be removed for your project.
 
 
 # Amazon Linux required for full compatibility with AWS Fargate
@@ -68,7 +68,8 @@ RUN  dnf -y group install "Development Tools" && \
   dnf -y clean all
 
 ##
-## THIRD: Install the "easy", lightweight pip packages
+## THIRD: Install remainder of python modules. These are relatively
+## lightweight.
 ##
 FROM stage2 AS stage3
 WORKDIR /django
@@ -112,7 +113,6 @@ RUN  ln -sf /dev/stdout /var/log/nginx/access.log && \
      ln -sf /dev/stderr /var/log/nginx/error.log
 CMD /django/entrypoint.sh
 
-##   NB: for development you can luanch gunicorn like so:
-##      source /django/.venv/bin/activate && \
-##      cd /django/xkcd_app && \
-##      exec gunicorn -w5 xkcd_app.wsgi:application --bind 0.0.0.0:8080
+# Note: There's an alternative script /django/entrypoint-dev.sh. This launches
+# the Django development server only. No gunicorn. No nginx.
+
