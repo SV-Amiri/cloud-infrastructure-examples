@@ -6,7 +6,22 @@
 ## Staged build to minimise deploy pipeline time.
 ##
 
-# Use Amazon Linux for compatibility with AWS Fargate
+# Inputs:
+# ------
+# a) ./requirements-stage{1-3}.txt - list of python modules installed by pip
+# b) ./entrypoint.sh - bash file. Executes when container starts. Runs the
+#    applications.
+# c) ./python-unsplash-1.1.0.tar - hacked version of python-unsplash module.
+#    Dependencies relaxed so it works on Python 3.9.
+# d) ./xkcd_app/ - Example Django application.
+# e) ./nginx.conf - nginx configuration file.
+#
+# Please note that requirements-stage{1-3}.txt almost certainly needs to be
+# modified for your own use. Majority of modules are there for my particular
+# project and likely can be removed for your project.
+
+
+# Amazon Linux required for full compatibility with AWS Fargate
 FROM amazonlinux:2022 AS stage1
 LABEL Maintainer="Edward Irvine <edward.at.mindhive@gmail.com>"
 LABEL Description="Amazon Linux w/ Python3.9 & Django 4 & gunicorn & NGINX"
@@ -31,7 +46,7 @@ RUN dnf -y update && \
     telnet && \
     dnf -y autoremove && \
     dnf clean all
-# Clean up at the end of each stage to reduce image size
+# Clean at the end of each stage to reduce image size
 
 ##
 ## SECOND: Install the larger and more complex pip packages.
@@ -61,7 +76,7 @@ COPY ./requirements-stage3.txt .
 # Hackage: python-unsplash module unmaintained and won't install.  I've
 # modified the source in local version below to relax dependencies. Seems to
 # work.
-ADD ./python-unsplash-1.1.0.tar . 
+ADD ./python-unsplash-1.1.0.tar .
 RUN  dnf -y group install "Development Tools" && \
   dnf -y install python-devel && \
   source .venv/bin/activate && \
@@ -89,7 +104,7 @@ FROM stage4 AS stage5
 WORKDIR /django
 COPY . /django/
 LABEL ports="8080"
-LABEL organisation="mindhive.org"
+LABEL organisation="example.org"
 EXPOSE 8080:8080
 WORKDIR /django/xkcd_app
 STOPSIGNAL SIGQUIT
