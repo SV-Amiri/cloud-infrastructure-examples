@@ -1,0 +1,14 @@
+{
+    "_comment": "lifecycle-rule-s3-very-short-term.json"
+    "Rules": [
+        {
+            "ID": "Delete noncurrent versions of objects after 1 day - while retaining 1 prior version",
+            "Filter": {},
+            "Status": "Enabled",
+            "NoncurrentVersionExpiration": {
+                "NoncurrentDays": 1,
+                "NewerNoncurrentVersions": 1
+            }
+        }
+    ]
+}

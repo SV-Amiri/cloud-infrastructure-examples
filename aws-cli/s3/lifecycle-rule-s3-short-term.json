@@ -1,0 +1,13 @@
+{
+    "Rules": [
+        {
+            "ID": "Delete noncurrent versions of objects after 3 days - while retaining 1 prior version",
+            "Filter": {},
+            "Status": "Enabled",
+            "NoncurrentVersionExpiration": {
+                "NoncurrentDays": 3,
+                "NewerNoncurrentVersions": 1
+            }
+        }
+    ]
+}
