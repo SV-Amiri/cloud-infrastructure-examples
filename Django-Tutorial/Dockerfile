@@ -49,6 +49,7 @@ LABEL ports="8080"
 LABEL organisation="example.org"
 EXPOSE 8080:8080
 STOPSIGNAL SIGQUIT
-#CMD /django/entrypoint.sh
+CMD /django/entrypoint.sh -migrate && \
+  /django/entrypoint.sh -run
 
 
