@@ -7,15 +7,17 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='XKCDComicViews',
+            name="XKCDComicViews",
             fields=[
-                ('comic_number', models.IntegerField(primary_key=True, serialize=False, unique=True)),
-                ('view_count', models.IntegerField(default=0)),
+                (
+                    "comic_number",
+                    models.IntegerField(primary_key=True, serialize=False, unique=True),
+                ),
+                ("view_count", models.IntegerField(default=0)),
             ],
         ),
     ]

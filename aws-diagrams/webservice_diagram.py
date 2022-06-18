@@ -1,12 +1,7 @@
 # diagram.py
 from diagrams import Cluster, Diagram, Edge
-from diagrams.aws.compute import (
-    EC2,
-    ECS,
-    ElasticContainerServiceContainer,
-    Fargate,
-    Lambda,
-)
+from diagrams.aws.compute import (EC2, ECS, ElasticContainerServiceContainer,
+                                  Fargate, Lambda)
 from diagrams.aws.database import DDB, RDS
 from diagrams.aws.engagement import SES
 from diagrams.aws.management import Cloudwatch
@@ -49,8 +44,8 @@ with Diagram(
                         container1 = ElasticContainerServiceContainer("container 1")
                         containern = ElasticContainerServiceContainer("container n")
 
-    #users >> dns
-    #cloudfront >> fargate
-    #fargate >> [container1, containern]
+    # users >> dns
+    # cloudfront >> fargate
+    # fargate >> [container1, containern]
 
 # ELB("slb") >> EC2("web") >> RDS("userdb")
